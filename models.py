@@ -16,24 +16,20 @@ class Files(BaseModel):
     content = BlobField()
 
 class Authors(BaseModel):
-    name = TextField()
-    surname = TextField()
+    first_name = TextField()
+    second_name = TextField()
+
+class Books(BaseModel):
+    title = TextField()
+    file_content = ForeignKeyField(Files, related_name='book_files', null=True)
+    links = JSONField(null=True)
+    year = IntegerField(null=True)
+    #magazines
+    number = IntegerField(null=True)
+    number_year = IntegerField(null=True)
 
 class Stories(BaseModel):
     title = TextField()
     author = ForeignKeyField(Authors, related_name='story_authors')
-
-class Magazines(BaseModel):
-    title = TextField()
-    number = IntegerField(null=True)
-    number_year = IntegerField(null=True)
+    book = ForeignKeyField(Books, related_name='story_books')
     year = IntegerField(null=True)
-    stories = ForeignKeyField(Stories, related_name='magazine_stories', null=True)
-    file_content = ForeignKeyField(Files, related_name='magazine_files', null=True)
-
-class Books(BaseModel):
-    title = TextField()
-    author = ForeignKeyField(Authors, related_name='books_authors', null=True)
-    file_content = ForeignKeyField(Files, related_name='book_files', null=True)
-    stories = ForeignKeyField(Stories, related_name='book_stories', null=True)
-    links = JSONField(null=True)

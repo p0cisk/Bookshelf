@@ -1,0 +1,46 @@
+<HTML lang="pl">
+<HEAD>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue"></script>
+
+</HEAD>
+<BODY>
+{% include '_navbar.html' %}
+
+<div id="root">
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Autorzy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="book in books">
+                <td><a v-text="book.title" href="#"></a></td>
+                <td>
+                    <div v-for="author in book.authors"><a v-text="author.name" href="#"></a></div>
+                    <!--<span v-on:click="removeUser(user, index)" v-bind:title="'Usuń użytkownika '+user.name">
+                    <i class="glyphicon glyphicon-trash fake-a action-icon" style="color:red" data-toggle="tooltip"></i>
+                    </span>&nbsp;
+                    <span v-on:click="resetUserPassword(user)" v-bind:title="'Zmień hasło użytkownika '+user.name">
+                    <i class="glyphicon glyphicon-lock fake-a action-icon" style="color:orange" data-toggle="tooltip"></i>
+                    </span>
+                    <span v-on:click="resetUserConnection(user)" v-bind:title="'Zresetuj połączenie użytkownika '+user.name">
+                    <i class="glyphicon glyphicon-refresh fake-a action-icon" style="color:orange" data-toggle="tooltip"></i>
+                    </span>-->
+                </td>
+
+            </tr>
+</tbody>
+    </table>
+    
+</div>
+
+</BODY>
+<script src="/static/js/books.js"></script>
+</HTML>
