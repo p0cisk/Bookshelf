@@ -3,6 +3,7 @@ var vm = new Vue({
     
     data: {
         authors: [],
+        searchText: '', 
     },
     
     methods: {
@@ -12,6 +13,16 @@ var vm = new Vue({
                 self.authors = data['result'];
             });
         }
+    },
+    
+    computed: {
+        filteredAuthors: function() {
+            if (!this.searchText){ return this.authors };
+            let text = this.searchText.toLowerCase();
+            return this.authors.filter(function(author){
+                return author.first_name.toLowerCase().indexOf( text )!==-1 || author.second_name.toLowerCase().indexOf( text )!==-1;
+            })
+        },
     }
 });
 
