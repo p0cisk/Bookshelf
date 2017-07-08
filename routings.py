@@ -48,3 +48,7 @@ def api_books():
     #print (dir(counter))
     return jsonify({'result':result})
 
+@mod_routings.route('/api/authors')
+def api_authors():
+    rs = Authors.select().order_by(Authors.second_name, Authors.first_name).dicts()
+    return jsonify({'result':list(rs)})
