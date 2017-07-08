@@ -3,6 +3,7 @@
 
 from flask import Blueprint, jsonify, render_template, redirect
 from models import Books, Authors, Stories
+from peewee import fn
 from playhouse.test_utils import  count_queries
 
 mod_routings = Blueprint('routings', __name__)
@@ -44,11 +45,25 @@ def api_books():
             book['authors'] = book_authors
             result.append( book )
     print (counter.count)
-    #print (counter.get_queries())
-    #print (dir(counter))
     return jsonify({'result':result})
 
 @mod_routings.route('/api/authors')
 def api_authors():
     rs = Authors.select().order_by(Authors.second_name, Authors.first_name).dicts()
+    return jsonify({'result':list(rs)})
+
+@mod_routings.route('/api/authors/<int:id>')
+def api_author(id):
+    rs = Authors.select().where(Authors.id==id).dicts().get()
+    return jsonify(rs)
+
+@mod_routings.route('/api/authors_books/<int:id>')
+def api_author_books(id):
+    books_id = set(Stories.select(fn.Distinct(Stories.book)).where(Stories.author==id).tuples())
+    rs = Books.select().where(Books.id<<books_id).dicts()
+    return jsonify({'result':list(rs)})
+
+@mod_routings.route('/api/authors_stories/<int:id>')
+def api_author_stories(id):
+    rs = Stories.select().where(Stories.author==id).dicts()
     return jsonify({'result':list(rs)})
