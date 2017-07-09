@@ -30,6 +30,9 @@ class Books(BaseModel):
 
 class Stories(BaseModel):
     title = TextField()
-    author = ForeignKeyField(Authors, related_name='story_authors')
     book = ForeignKeyField(Books, related_name='story_books')
     year = IntegerField(null=True)
+
+class AuthorsStories(BaseModel):
+    author = ForeignKeyField(Authors)
+    story = ForeignKeyField(Stories)

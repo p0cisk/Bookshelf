@@ -8,7 +8,7 @@ var vm = new Vue({
     methods: {
         getBooks : function(){
             let self = this;
-            $.getJSON('/api/books', function(data){
+            $.getJSON('/api/stories', function(data){
                 self.books = data['result'];
             });
         }

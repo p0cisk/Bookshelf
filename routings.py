@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, jsonify, render_template, redirect
-from models import Books, Authors, Stories
+from models import Books, Authors, Stories, AuthorsStories
 from peewee import fn
-from playhouse.test_utils import  count_queries
+from decorators import count
+from playhouse.shortcuts import model_to_dict
+from collections import defaultdict
 
 mod_routings = Blueprint('routings', __name__)
 
@@ -25,26 +27,70 @@ def authors():
 # API
 
 @mod_routings.route('/api/books')
+@count
 def api_books():
-    with count_queries() as counter:
-        rs = (Books.select(Books, Stories, Authors)
-            .join(Stories)
-            .join(Authors)
-            .aggregate_rows()
-            )
-        result = []
-        for row in rs:
-            book = {'title':row.title}
-            authors = {}
-            for story in row.story_books:
-                author = story.author
-                authors[author.id] = '{}, {}'.format(author.second_name, author.first_name)
-            book_authors = []
-            for aid, author in authors.items():
-                book_authors.append({'id':aid, 'name':author})
-            book['authors'] = book_authors
-            result.append( book )
-    print (counter.count)
+    #TODO: Fix when needed
+    result = []
+    
+    #B = Books.select()
+    #S = Stories.select()
+    rs = Stories.select(Stories, Authors).join(AuthorsStories).join(Authors).aggregate_rows()
+    for row in rs:
+        print(row)
+    print(dir(row))
+    
+    
+    """
+    rs = (Books.select(Books, Stories, Authors)
+        .join(Stories)
+        .join(AuthorsStories)
+        .join(Authors)
+        .aggregate_rows()
+        )
+    print( rs)
+    
+    for row in rs:
+        #print (row)
+        #print (row.story_books)
+        #print (dir(row.story_books[0]))
+        #print (model_to_dict(row))
+        
+        #book = {'title':row.title}
+        book = model_to_dict(row)#{'title':row.title}
+        authors = {}
+        #for story in row.story_books:
+        #    print (story)
+        #    print (list(story.authorsstories_set))
+        '''
+        authors = {}
+        for story in row.story_books:
+            print (story)
+            print (story.authorsstories_set)
+            print (dir(story.authorsstories_set))
+            author = story.author
+            authors[author.id] = '{}, {}'.format(author.second_name, author.first_name)
+        book_authors = []
+        for aid, author in authors.items():
+            book_authors.append({'id':aid, 'name':author})
+        book['authors'] = book_authors'''
+        result.append( book )
+        
+        '''
+        book = {'title':row.title}
+        authors = {}
+        for story in row.story_books:
+            print (story)
+            print (story.authorsstories_set)
+            print (dir(story.authorsstories_set))
+            author = story.author
+            authors[author.id] = '{}, {}'.format(author.second_name, author.first_name)
+        book_authors = []
+        for aid, author in authors.items():
+            book_authors.append({'id':aid, 'name':author})
+        book['authors'] = book_authors
+        result.append( book )
+        '''
+    """
     return jsonify({'result':result})
 
 @mod_routings.route('/api/authors')
@@ -67,3 +113,36 @@ def api_author_books(id):
 def api_author_stories(id):
     rs = Stories.select().where(Stories.author==id).dicts()
     return jsonify({'result':list(rs)})
+
+@mod_routings.route('/api/stories')
+@count
+def api_stories():
+    result = []
+    rs = (AuthorsStories
+        .select(AuthorsStories, Stories, Authors)
+        .join(Stories)
+        .switch(AuthorsStories)
+        .join(Authors)
+        )
+    stories = defaultdict(lambda:defaultdict(dict))
+    for row in rs:
+        stories[row.story.id]['authors'][row.author.id] = model_to_dict(row.author)
+        stories[row.story.id]['title'] = row.story.title
+        stories[row.story.id]['id'] = row.story.id
+    for story in stories.values():
+        story['authors'] = list(story['authors'].values())
+        result.append(story)
+    return jsonify({'result':result})
+
+@mod_routings.route('/api/stories/<int:id>')
+@count
+def api_stories_by_id(id):
+    story = Stories.select().where(Stories.id==id).dicts().get()
+    story['authors'] = list(Authors
+        .select()
+        .join(AuthorsStories)
+        .join(Stories)
+        .where(Stories.id==id)
+        .dicts()
+        )
+    return jsonify({'result':story})

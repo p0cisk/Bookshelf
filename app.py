@@ -3,7 +3,7 @@
 
 from flask import Flask
 from peewee import OperationalError
-from models import db, Books, Stories, Authors, Files
+from models import db, Books, Stories, Authors, Files, AuthorsStories
 import os
 
 #Initialize flask application
@@ -20,7 +20,7 @@ db.init( app.config['DBPATH'] )
 if not os.path.exists( app.config['DBPATH'] ):
     #Create db if not exist
     try:
-        db.create_tables( [Books, Stories, Authors, Files] )
+        db.create_tables( [Books, Stories, Authors, Files, AuthorsStories] )
         try:
             #Add sample data
             from add_sample import add_sample

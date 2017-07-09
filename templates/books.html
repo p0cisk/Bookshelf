@@ -23,16 +23,7 @@
             <tr v-for="book in books">
                 <td><a v-text="book.title" href="#"></a></td>
                 <td>
-                    <div v-for="author in book.authors"><a v-text="author.name" href="#"></a></div>
-                    <!--<span v-on:click="removeUser(user, index)" v-bind:title="'Usuń użytkownika '+user.name">
-                    <i class="glyphicon glyphicon-trash fake-a action-icon" style="color:red" data-toggle="tooltip"></i>
-                    </span>&nbsp;
-                    <span v-on:click="resetUserPassword(user)" v-bind:title="'Zmień hasło użytkownika '+user.name">
-                    <i class="glyphicon glyphicon-lock fake-a action-icon" style="color:orange" data-toggle="tooltip"></i>
-                    </span>
-                    <span v-on:click="resetUserConnection(user)" v-bind:title="'Zresetuj połączenie użytkownika '+user.name">
-                    <i class="glyphicon glyphicon-refresh fake-a action-icon" style="color:orange" data-toggle="tooltip"></i>
-                    </span>-->
+                    <div v-for="author in book.authors"><a v-text="author.second_name + ', ' + author.first_name" href="#"></a></div>
                 </td>
 
             </tr>
