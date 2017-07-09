@@ -10,27 +10,35 @@
 <BODY>
     {% include '_navbar.html' %}
 <div id="root">
-    <div class="input-group">
-        <input v-model="searchText" type="text" class="form-control" placeholder="Search for...">
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Imię i nazwisko</th>
-                <th>X</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="author in filteredAuthors">
-                <td><a v-text="author.second_name + ', ' + author.first_name" href="#"></a></td>
-                <td>
-                    
-                </td>
+    <div v-show="currentAuthor===null">
+        <div class="input-group">
+            <input v-model="searchText" type="text" class="form-control" placeholder="Search for...">
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Imię i nazwisko</th>
+                    <th>X</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="author in filteredAuthors">
+                    <td><a v-text="author.second_name + ', ' + author.first_name" v-on:click="loadAuthor(author)" href="#"></a></td>
+                    <td>
+                        
+                    </td>
 
-            </tr>
-</tbody>
-    </table>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     
+    <!-- Author -->
+    <div v-if="currentAuthor!==null">
+        <p><a v-on:click="loadAuthor(null)" href="#">Powrót</a></p>
+        <p>Imię: <span v-text="currentAuthorData.first_name"></span></p>
+        <p>Nazwisko: <span v-text="currentAuthorData.second_name"></span></p>
+    </div>
 </div>
 </BODY>
 <script src="/static/js/authors.js"></script>

@@ -3,7 +3,9 @@ var vm = new Vue({
     
     data: {
         authors: [],
-        searchText: '', 
+        searchText: '',
+        currentAuthor: null,
+        currentAuthorData: {}
     },
     
     methods: {
@@ -12,6 +14,23 @@ var vm = new Vue({
             $.getJSON('/api/authors', function(data){
                 self.authors = data['result'];
             });
+        },
+        
+        loadAuthor : function(author){
+            if (author===null){
+                this.currentAuthor = null;
+                return
+            };
+            let self = this;
+            $.getJSON('/api/authors/'+author.id, function(data){
+                self.currentAuthorData = data;
+                self.currentAuthor = data['id'];
+            });
+        },
+        
+        showAuthors : function(){
+            this.currentAuthor = null;
+            this.currentAuthorData = {};
         }
     },
     
