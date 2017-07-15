@@ -4,9 +4,6 @@ var vm = new Vue({
     data: {
         authors: [],
         searchText: '',
-        currentAuthor: null,
-        currentAuthorData: {},
-        currentAuthorStories: [],
     },
     
     methods: {
@@ -16,27 +13,6 @@ var vm = new Vue({
                 self.authors = data['result'];
             });
         },
-        
-        loadAuthor : function(author){
-            if (author===null){
-                this.currentAuthor = null;
-                return
-            };
-            let self = this;
-            $.getJSON('/api/authors/'+author.id, function(data){
-                self.currentAuthorData = data;
-                self.currentAuthor = data['id'];
-            });
-            $.getJSON('/api/authors_stories/'+author.id, function(data){
-                self.currentAuthorStories = data.result;
-            });
-        },
-        
-        showAuthors : function(){
-            this.currentAuthor = null;
-            this.currentAuthorData = {};
-            this.currentAuthorStories = [];
-        }
     },
     
     computed: {
@@ -46,10 +22,6 @@ var vm = new Vue({
             return this.authors.filter(function(author){
                 return author.first_name.toLowerCase().indexOf( text )!==-1 || author.second_name.toLowerCase().indexOf( text )!==-1;
             })
-        },
-        
-        filteredStories: function(){
-            return this.currentAuthorStories;
         },
     }
 });

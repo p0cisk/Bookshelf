@@ -24,6 +24,10 @@ def books():
 def authors():
     return render_template('authors.html')
 
+@mod_routings.route('/authors/<int:aid>')
+def authors_id(aid):
+    return render_template('authors_id.html', aid=aid)
+
 # API
 
 @mod_routings.route('/api/books')

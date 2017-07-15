@@ -10,26 +10,31 @@
 <BODY>
     {% include '_navbar.html' %}
 <div id="root">
+    <!-- Author -->
     <div>
-        <div class="input-group">
-            <input v-model="searchText" type="text" class="form-control" placeholder="Search for...">
+        <p>Imię: <span v-text="currentAuthorData.first_name"></span></p>
+        <p>Nazwisko: <span v-text="currentAuthorData.second_name"></span></p>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>X</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="story in filteredStories">
+                        <td><a v-text="story.title" href="#"></a></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Imię i nazwisko</th>
-                    <th>X</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="author in filteredAuthors">
-                    <td><a v-text="author.second_name + ', ' + author.first_name" v-bind:href="'/authors/'+author.id"></a></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </div>
 </BODY>
-<script src="/static/js/authors.js"></script>
+<script>
+var currentAuthor = {{aid}};
+</script>
+<script src="/static/js/authors_id.js"></script>
 </HTML>

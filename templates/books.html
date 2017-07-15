@@ -23,11 +23,10 @@
             <tr v-for="book in books">
                 <td><a v-text="book.title" href="#"></a></td>
                 <td>
-                    <div v-for="author in book.authors"><a v-text="author.second_name + ', ' + author.first_name" href="#"></a></div>
+                    <div v-for="author in book.authors"><a v-text="author.second_name + ', ' + author.first_name" v-bind:href="'/authors/'+author.id"></a></div>
                 </td>
-
             </tr>
-</tbody>
+        </tbody>
     </table>
     
 </div>

@@ -5,8 +5,8 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li {% if request.path=='/books' %}class="active"{% endif %}><a href="/books">Książki</a></li>
-                <li {% if request.path=='/authors' %}class="active"{% endif %}><a href="/authors">Autorzy</a></li>
+                <li {% if request.path.startswith('/books') %}class="active"{% endif %}><a href="/books">Książki</a></li>
+                <li {% if request.path.startswith('/authors') %}class="active"{% endif %}><a href="/authors">Autorzy</a></li>
             </ul>
         </div>
     </div>
