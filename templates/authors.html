@@ -24,10 +24,7 @@
             <tbody>
                 <tr v-for="author in filteredAuthors">
                     <td><a v-text="author.second_name + ', ' + author.first_name" v-on:click="loadAuthor(author)" href="#"></a></td>
-                    <td>
-                        
-                    </td>
-
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -38,6 +35,22 @@
         <p><a v-on:click="loadAuthor(null)" href="#">Powrót</a></p>
         <p>Imię: <span v-text="currentAuthorData.first_name"></span></p>
         <p>Nazwisko: <span v-text="currentAuthorData.second_name"></span></p>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>X</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="story in filteredStories">
+                        <td><a v-text="story.title" href="#"></a></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </BODY>

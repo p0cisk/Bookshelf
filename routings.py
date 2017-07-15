@@ -111,7 +111,7 @@ def api_author_books(id):
 
 @mod_routings.route('/api/authors_stories/<int:id>')
 def api_author_stories(id):
-    rs = Stories.select().where(Stories.author==id).dicts()
+    rs = Stories.select().join(AuthorsStories).where(AuthorsStories.author==id).dicts()
     return jsonify({'result':list(rs)})
 
 @mod_routings.route('/api/stories')
