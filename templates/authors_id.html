@@ -12,9 +12,12 @@
 <div id="root">
     <!-- Author -->
     <div>
-        <p>Imię: <span v-text="currentAuthorData.first_name"></span></p>
-        <p>Nazwisko: <span v-text="currentAuthorData.second_name"></span></p>
+        <p>Imię: <span v-text="authorData.first_name"></span></p>
+        <p>Nazwisko: <span v-text="authorData.second_name"></span></p>
         <div>
+            <div class="input-group">
+                <input v-model="searchText" type="text" class="form-control" placeholder="Search for...">
+            </div>
             <table class="table">
                 <thead>
                     <tr>

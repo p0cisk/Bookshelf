@@ -11,7 +11,9 @@
 {% include '_navbar.html' %}
 
 <div id="root">
-    
+    <div class="input-group">
+        <input v-model="searchText" type="text" class="form-control" placeholder="Search for...">
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -20,10 +22,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="book in books">
-                <td><a v-text="book.title" href="#"></a></td>
+            <tr v-for="story in filteredStories">
+                <td><a v-text="story.title" href="#"></a></td>
                 <td>
-                    <div v-for="author in book.authors"><a v-text="author.second_name + ', ' + author.first_name" v-bind:href="'/authors/'+author.id"></a></div>
+                    <div v-for="author in story.authors"><a v-text="author.second_name + ', ' + author.first_name" v-bind:href="'/authors/'+author.id"></a></div>
                 </td>
             </tr>
         </tbody>
