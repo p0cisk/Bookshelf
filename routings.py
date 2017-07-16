@@ -109,22 +109,22 @@ def api_authors():
 @mod_routings.route('/api/authors/<int:aid>', methods=['GET', 'PUT'])
 def api_author(aid):
     if request.method=='GET':
-        rs = Authors.select().where(Authors.id==id).dicts().get()
+        rs = Authors.select().where(Authors.id==aid).dicts().get()
         return jsonify(rs)
     else:
         data = request.get_json(force=True)
         rs = Authors.update(**data).where(Authors.id==aid).execute()
         return jsonify(data)
 
-@mod_routings.route('/api/authors_books/<int:id>')
-def api_author_books(id):
-    books_id = set(Stories.select(fn.Distinct(Stories.book)).where(Stories.author==id).tuples())
+@mod_routings.route('/api/authors_books/<int:aid>')
+def api_author_books(aid):
+    books_id = set(Stories.select(fn.Distinct(Stories.book)).where(Stories.author==aid).tuples())
     rs = Books.select().where(Books.id<<books_id).dicts()
     return jsonify({'result':list(rs)})
 
-@mod_routings.route('/api/authors_stories/<int:id>')
-def api_author_stories(id):
-    rs = Stories.select().join(AuthorsStories).where(AuthorsStories.author==id).dicts()
+@mod_routings.route('/api/authors_stories/<int:aid>')
+def api_author_stories(aid):
+    rs = Stories.select().join(AuthorsStories).where(AuthorsStories.author==aid).dicts()
     return jsonify({'result':list(rs)})
 
 @mod_routings.route('/api/stories')
@@ -147,15 +147,15 @@ def api_stories():
         result.append(story)
     return jsonify({'result':result})
 
-@mod_routings.route('/api/stories/<int:id>')
+@mod_routings.route('/api/stories/<int:aid>')
 @count
-def api_stories_by_id(id):
-    story = Stories.select().where(Stories.id==id).dicts().get()
+def api_stories_by_id(aid):
+    story = Stories.select().where(Stories.id==aid).dicts().get()
     story['authors'] = list(Authors
         .select()
         .join(AuthorsStories)
         .join(Stories)
-        .where(Stories.id==id)
+        .where(Stories.id==aid)
         .dicts()
         )
     return jsonify({'result':story})
