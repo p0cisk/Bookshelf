@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, jsonify, render_template, redirect
+from flask import Blueprint, jsonify, render_template, redirect, request
 from models import Books, Authors, Stories, AuthorsStories
 from peewee import fn
 from decorators import count
@@ -97,15 +97,24 @@ def api_books():
     """
     return jsonify({'result':result})
 
-@mod_routings.route('/api/authors')
+@mod_routings.route('/api/authors', methods=['GET', 'POST'])
 def api_authors():
-    rs = Authors.select().order_by(Authors.second_name, Authors.first_name).dicts()
-    return jsonify({'result':list(rs)})
+    if request.method=='GET':
+        rs = Authors.select().order_by(Authors.second_name, Authors.first_name).dicts()
+        return jsonify({'result':list(rs)})
+    else:
+        rs = Authors.create(**request.get_json(force=True))
+        return jsonify(model_to_dict(rs))
 
-@mod_routings.route('/api/authors/<int:id>')
-def api_author(id):
-    rs = Authors.select().where(Authors.id==id).dicts().get()
-    return jsonify(rs)
+@mod_routings.route('/api/authors/<int:aid>', methods=['GET', 'PUT'])
+def api_author(aid):
+    if request.method=='GET':
+        rs = Authors.select().where(Authors.id==id).dicts().get()
+        return jsonify(rs)
+    else:
+        data = request.get_json(force=True)
+        rs = Authors.update(**data).where(Authors.id==aid).execute()
+        return jsonify(data)
 
 @mod_routings.route('/api/authors_books/<int:id>')
 def api_author_books(id):
